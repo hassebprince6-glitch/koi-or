@@ -1,0 +1,505 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .av-root {
+    font-family: 'Rajdhani', sans-serif;
+    background: #050a14;
+    min-height: 600px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    color: #e0f0ff;
+  }
+
+  .stars {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 20% 30%, #0a1a2e 0%, #050a14 60%);
+  }
+
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: #fff;
+    animation: twinkle 3s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.1; transform: scale(1); }
+    100% { opacity: 0.8; transform: scale(1.4); }
+  }
+
+  .grid-lines {
+    position: absolute; inset: 0; z-index: 1; opacity: 0.04;
+    background-image:
+      linear-gradient(rgba(0,200,255,1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,200,255,1) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .content {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 32px 24px 28px;
+    gap: 24px;
+  }
+
+  .header {
+    text-align: center;
+  }
+
+  .logo-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #00d4ff 0%, #7b2fff 50%, #ff2d78 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+  }
+
+  .tagline {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #4a7a9b;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  .orb-container {
+    position: relative;
+    width: 140px; height: 140px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .orb-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    animation: rotate linear infinite;
+  }
+
+  .ring1 {
+    width: 130px; height: 130px;
+    border-top-color: #00d4ff;
+    border-right-color: #00d4ff33;
+    animation-duration: 3s;
+  }
+  .ring2 {
+    width: 110px; height: 110px;
+    border-bottom-color: #7b2fff;
+    border-left-color: #7b2fff33;
+    animation-duration: 2s;
+    animation-direction: reverse;
+  }
+  .ring3 {
+    width: 90px; height: 90px;
+    border-top-color: #ff2d78;
+    border-right-color: #ff2d7833;
+    animation-duration: 4s;
+  }
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .mic-btn {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #1a3a5c, #050a14);
+    border: 2px solid #00d4ff55;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    position: relative;
+    z-index: 2;
+  }
+
+  .mic-btn:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 20px #00d4ff44, inset 0 0 10px #00d4ff11;
+    transform: scale(1.05);
+  }
+
+  .mic-btn.active {
+    border-color: #ff2d78;
+    box-shadow: 0 0 30px #ff2d7866, inset 0 0 15px #ff2d7822;
+    animation: pulse-mic 1s infinite;
+  }
+
+  @keyframes pulse-mic {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .mic-icon {
+    font-size: 26px;
+    color: #00d4ff;
+    transition: color 0.2s;
+  }
+
+  .mic-btn.active .mic-icon { color: #ff2d78; }
+
+  .status-text {
+    font-size: 13px;
+    color: #4a7a9b;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    min-height: 18px;
+    transition: color 0.3s;
+  }
+
+  .status-text.listening { color: #ff2d78; }
+  .status-text.thinking { color: #7b2fff; }
+  .status-text.speaking { color: #00d4ff; }
+
+  .waveform {
+    display: flex; align-items: center; gap: 3px;
+    height: 36px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .waveform.active { opacity: 1; }
+
+  .wave-bar {
+    width: 3px;
+    background: #00d4ff;
+    border-radius: 2px;
+    animation: wave-anim 0.8s ease-in-out infinite alternate;
+  }
+
+  .wave-bar:nth-child(2n) { background: #7b2fff; animation-delay: 0.15s; }
+  .wave-bar:nth-child(3n) { background: #ff2d78; animation-delay: 0.3s; }
+
+  @keyframes wave-anim {
+    from { height: 4px; }
+    to { height: 28px; }
+  }
+
+  .chat-box {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(10, 20, 40, 0.8);
+    border: 0.5px solid #00d4ff22;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .chat-header {
+    padding: 10px 16px;
+    border-bottom: 0.5px solid #00d4ff15;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #00d4ff66;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #00d4ff; animation: blink 2s infinite; }
+  .dot.red { background: #ff2d78; animation-delay: 0.7s; }
+  .dot.purple { background: #7b2fff; animation-delay: 1.4s; }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .chat-messages {
+    padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    min-height: 120px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .msg {
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    max-width: 85%;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg.user {
+    align-self: flex-end;
+    background: rgba(0, 212, 255, 0.12);
+    border: 0.5px solid #00d4ff33;
+    color: #a8e6f0;
+  }
+
+  .msg.ai {
+    align-self: flex-start;
+    background: rgba(123, 47, 255, 0.12);
+    border: 0.5px solid #7b2fff33;
+    color: #c8b8ff;
+  }
+
+  .input-row {
+    display: flex; gap: 8px;
+    padding: 10px 12px;
+    border-top: 0.5px solid #00d4ff15;
+  }
+
+  .chat-input {
+    flex: 1;
+    background: rgba(0, 212, 255, 0.05);
+    border: 0.5px solid #00d4ff22;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #e0f0ff;
+    font-family: 'Rajdhani', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .chat-input:focus { border-color: #00d4ff66; }
+  .chat-input::placeholder { color: #2a4a6b; }
+
+  .send-btn {
+    background: linear-gradient(135deg, #00d4ff22, #7b2fff22);
+    border: 0.5px solid #7b2fff66;
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: #7b2fff;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .send-btn:hover {
+    background: linear-gradient(135deg, #00d4ff33, #7b2fff33);
+    border-color: #7b2fff;
+    color: #b89fff;
+  }
+
+  .lang-pills {
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  }
+
+  .pill {
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: 0.5px solid #00d4ff33;
+    color: #4a7a9b;
+    background: transparent;
+    transition: all 0.2s;
+  }
+
+  .pill:hover, .pill.active {
+    border-color: #00d4ff;
+    color: #00d4ff;
+    background: rgba(0, 212, 255, 0.08);
+  }
+
+  .features-row {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  }
+
+  .feat {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px;
+    color: #2a4a6b;
+    letter-spacing: 0.5px;
+  }
+
+  .feat i { font-size: 14px; color: #00d4ff44; }
+</style>
+
+<div class="av-root">
+  <div class="stars" id="starfield"></div>
+  <div class="grid-lines"></div>
+
+  <div class="content">
+    <div class="header">
+      <div class="logo-text">ALPHA VOICE AI</div>
+      <div class="tagline">by Haseeb Verro · Real-time · Multi-lingual</div>
+    </div>
+
+    <div class="lang-pills">
+      <button class="pill active" onclick="setLang(this,'en')">English</button>
+      <button class="pill" onclick="setLang(this,'ur')">اردو</button>
+      <button class="pill" onclick="setLang(this,'ro')">Roman Urdu</button>
+      <button class="pill" onclick="setLang(this,'hi')">हिंदी</button>
+    </div>
+
+    <div class="orb-container">
+      <div class="orb-ring ring1"></div>
+      <div class="orb-ring ring2"></div>
+      <div class="orb-ring ring3"></div>
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()">
+        <i class="ti ti-microphone mic-icon" id="micIcon"></i>
+      </button>
+    </div>
+
+    <div class="waveform" id="waveform">
+      <div class="wave-bar" style="animation-delay:0s"></div>
+      <div class="wave-bar" style="animation-delay:0.1s"></div>
+      <div class="wave-bar" style="animation-delay:0.2s"></div>
+      <div class="wave-bar" style="animation-delay:0.05s"></div>
+      <div class="wave-bar" style="animation-delay:0.3s"></div>
+      <div class="wave-bar" style="animation-delay:0.15s"></div>
+      <div class="wave-bar" style="animation-delay:0.25s"></div>
+      <div class="wave-bar" style="animation-delay:0.08s"></div>
+      <div class="wave-bar" style="animation-delay:0.18s"></div>
+    </div>
+
+    <div class="status-text" id="statusTxt">TAP MIC TO SPEAK</div>
+
+    <div class="chat-box">
+      <div class="chat-header">
+        <div class="dot"></div>
+        <div class="dot red"></div>
+        <div class="dot purple"></div>
+        <span>LIVE CHAT</span>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg ai">Acha, mein Alpha Voice AI hoon. Kya haal hai? Kuch poochna ho toh batao!</div>
+      </div>
+      <div class="input-row">
+        <input class="chat-input" id="chatInput" placeholder="Type in any language..." onkeydown="if(event.key==='Enter') sendMsg()" />
+        <button class="send-btn" onclick="sendMsg()" aria-label="Send">
+          <i class="ti ti-send" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="features-row">
+      <div class="feat"><i class="ti ti-world" aria-hidden="true"></i> Multi-lang</div>
+      <div class="feat"><i class="ti ti-bolt" aria-hidden="true"></i> Real-time</div>
+      <div class="feat"><i class="ti ti-mood-smile" aria-hidden="true"></i> Emotion-aware</div>
+      <div class="feat"><i class="ti ti-shield-check" aria-hidden="true"></i> No emoji reads</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const stars = document.getElementById('starfield');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2 + 0.5;
+    s.style.cssText = `width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+    stars.appendChild(s);
+  }
+
+  let micActive = false;
+  let currentLang = 'en';
+
+  const greetings = {
+    en: "Hello! I'm Alpha Voice AI. How can I help you today?",
+    ur: "السلام علیکم! میں Alpha Voice AI ہوں۔ آپ کی کیا مدد کر سکتا ہوں؟",
+    ro: "Acha, kya haal hai! Main Alpha Voice AI hoon. Batao kya madad chahiye?",
+    hi: "नमस्ते! मैं Alpha Voice AI हूं। आपकी कैसे मदद कर सकता हूं?"
+  };
+
+  const micResponses = {
+    en: ["Go ahead, I'm listening...", "Hmm, interesting question!", "Theek hai, let me think...", "Acha, here's what I know..."],
+    ur: ["جی، میں سن رہا ہوں...", "ہممم، اچھا سوال ہے!", "ٹھیک ہے، سوچتا ہوں..."],
+    ro: ["Hmm, bolo bolo, main sun raha hoon...", "Acha, samajh gaya!", "Dekho, mera jawab yeh hai..."],
+    hi: ["हां, मैं सुन रहा हूं...", "अच्छा सवाल है!", "देखो, मेरा जवाब है..."]
+  };
+
+  function setLang(el, lang) {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    currentLang = lang;
+    addMsg(greetings[lang] || greetings.en, 'ai');
+  }
+
+  function toggleMic() {
+    micActive = !micActive;
+    const btn = document.getElementById('micBtn');
+    const icon = document.getElementById('micIcon');
+    const status = document.getElementById('statusTxt');
+    const wave = document.getElementById('waveform');
+
+    if (micActive) {
+      btn.classList.add('active');
+      icon.className = 'ti ti-microphone mic-icon';
+      status.textContent = 'LISTENING...';
+      status.className = 'status-text listening';
+      wave.classList.add('active');
+
+      setTimeout(() => {
+        const responses = micResponses[currentLang] || micResponses.en;
+        const r = responses[Math.floor(Math.random() * responses.length)];
+        status.textContent = 'THINKING...';
+        status.className = 'status-text thinking';
+        setTimeout(() => {
+          status.textContent = 'SPEAKING...';
+          status.className = 'status-text speaking';
+          addMsg('[Voice input detected]', 'user');
+          addMsg(r, 'ai');
+          setTimeout(() => {
+            micActive = false;
+            btn.classList.remove('active');
+            status.textContent = 'TAP MIC TO SPEAK';
+            status.className = 'status-text';
+            wave.classList.remove('active');
+          }, 1800);
+        }, 1000);
+      }, 2000);
+    } else {
+      btn.classList.remove('active');
+      status.textContent = 'TAP MIC TO SPEAK';
+      status.className = 'status-text';
+      wave.classList.remove('active');
+    }
+  }
+
+  function cleanEmoji(text) {
+    return text.replace(/[\u{1F600}-\u{1F6FF}\u{1F300}-\u{1F5FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+  }
+
+  function addMsg(text, role) {
+    const box = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg ' + role;
+    div.textContent = cleanEmoji(text);
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function sendMsg() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    addMsg(text, 'user');
+    input.value = '';
+
+    const status = document.getElementById('statusTxt');
+    status.textContent = 'THINKING...';
+    status.className = 'status-text thinking';
+
+    setTimeout(() => {
+      const aiReplies = {
+        en: ["Hmm, that's a great point! Let me elaborate...", "Theek hai, I understand what you mean.", "Acha, here's my take on that.", "Dekho, the answer is quite interesting actually."],
+        ur: ["ہاں، یہ ایک اچھا سوال ہے!", "ٹھیک ہے، سمجھ گیا۔", "اچھا، میرا جواب یہ ہے۔"],
+        ro: ["Hmm, samajh gaya!", "Acha, theek baat hai yaar.", "Dekho, yeh interesting hai.", "Haan bilkul, main bata deta hoon."],
+        hi: ["हां, अच्छा सवाल है!", "ठीक है, समझ गया।", "देखो, मेरा जवाब..."]
+      };
+      const arr = aiReplies[currentLang] || aiReplies.en;
+      addMsg(arr[Math.floor(Math.random() * arr.length)], 'ai');
+      status.textContent = 'TAP MIC TO SPEAK';
+      status.className = 'status-text';
+    }, 900);
+  }
+</script>
